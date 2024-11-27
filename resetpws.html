@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reset</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+        <nav class="navbar navbar-light bg-light">
+          <div class="container-fluid row">
+            <a class="navbar-brand d-flex align-items-center" href="./index.html">
+              <img
+                src="./assets/logo_11423533.png"
+                alt="logo"
+                width="60px"
+                height="60px"
+                class="d-inline-block align-text-top me-3"
+              />
+              Medical Certificate
+            </a>
+          </div>
+        </nav>
+      </header>
+      <main >
+    <section class="container-fluid main d-flex justify-content-center p-2 pt-5 p-lg-5">
+      <div class="container col-12 col-md-8 col-lg-4 ">
+        <div id="liveAlertPlaceholder"></div>
+        <h4 class="mb-3">Reset Password</h4>
+        
+        <div class="form-floating mb-3">
+          <input
+            type="password"
+            class="form-control"
+            id="floatingPassword"
+            placeholder="Password"
+            value="karthicknammakkal@gmail.com"
+          />
+          <p id="Passworderr"></p>
+          <label for="floatingPassword">Password</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            type="password"
+            class="form-control"
+            id="floatingConfrimPassword"
+            placeholder="Password"
+            value="karthicknammakkal@gmail.com"
+          />
+          <p id="ConfrimPassworderr"></p>
+          <label for="floatingConfrimPassword">Confrim Password</label>
+        </div>
+        <button type="button" class="btn btn-primary col-12 mb-3" id="Reset">
+          Reset
+        </button>
+       
+        
+      </div>
+      <div id="freaze">
+        <div class="spinner"></div>
+        <p>
+          The server is taking longer than expected to respond. Please
+          wait a moment or try again later.
+        </p>
+      </div>
+    </section>
+</section>
+</main>
+<footer class="d-flex justify-content-center align-items-center bg-dark">
+    <div class="attribution text-light">
+      ©Coded by
+      <a href="https://www.linkedin.com/in/karthick-kaliannan-68b763191/"
+        >Karthick</a
+      >.
+    </div>
+  </footer>
+  <script type="module" >
+  import API_URI from "./config/global.js";
+import reset from "./controllers/reset.js";
+  function validatesigninForm() {
+  let flag;
+  const password = document.getElementById("floatingPassword");
+  const Passworderr = document.getElementById("Passworderr");
+
+  if (password.value === "") {
+    flag = true;
+    Passworderr.innerText = "Password  should not be empty!";
+  } else if (password.value.length < 8) {
+    flag = true;
+    Passworderr.innerText = "Password cannot be less than 8 characters";
+  } else {
+    Passworderr.innerText = "";
+  }
+
+  const confrimPassword = document.getElementById("floatingConfrimPassword");
+  const ConfrimPassworderr = document.getElementById("ConfrimPassworderr");
+
+  if (confrimPassword.value === "") {
+    ConfrimPassworderr.innerText = "Confrim Password should not be empty!";
+  } else if (confrimPassword.value != password.value) {
+    ConfrimPassworderr.innerText =
+      "The password and confirmed password do not match!";
+    flag = true;
+  } else {
+    ConfrimPassworderr.innerText = "";
+  }
+  if (flag) {
+    return false;
+  }
+  return true;
+}
+document.getElementById("Reset").addEventListener("click", async () => {
+  const freaze = document.getElementById("freaze");
+  const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
+  if (alertPlaceholder.innerHTML == "") {
+    let form = await validatesigninForm();
+    if (form) {
+      freaze.style.display = "flex";
+
+      const password = document.getElementById("floatingConfrimPassword");
+console.log(window.location.href);
+const searchParams = new URLSearchParams(window.location.search);
+// console.log(searchParams.get("token"));
+      let response = await reset(searchParams.get("token"),password);
+      console.log(response);
+      const appendAlert = (message, type) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = [
+          `<div class="alert alert-${type} alert-dismissible" role="alert">
+            <div>${message}</div>
+            </div>`,
+        ];
+        const alertPlaceholderCheck = document.getElementById(
+          "liveAlertPlaceholder"
+        );
+        if (alertPlaceholderCheck.innerHTML == "") {
+          alertPlaceholder.append(wrapper);
+        }
+        freaze.style.display = "none";
+      };
+
+      if (response.code == 401) {
+        appendAlert(response.message, "danger");
+      } else {
+        if(response.message=="Invalid Email"){
+        appendAlert(response.message, "danger");
+        }
+        else if(response.message=="Password reset email was sent successfully."){
+        appendAlert(response.message, "success");
+        }
+
+        freaze.style.display = "none";
+      
+      }
+    }
+  }
+});
+</script>
+  </body>
+</html>

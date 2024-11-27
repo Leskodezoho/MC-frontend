@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+        <nav class="navbar navbar-light bg-light">
+          <div class="container-fluid row">
+            <a class="navbar-brand d-flex align-items-center" href="./index.html">
+              <img
+                src="./assets/logo_11423533.png"
+                alt="logo"
+                width="60px"
+                height="60px"
+                class="d-inline-block align-text-top me-3"
+              />
+              Medical Certificate
+            </a>
+          </div>
+        </nav>
+      </header>
+      <main >
+    <section class="container-fluid main d-flex justify-content-center  p-2 pt-5 p-lg-5 flex-column">
+      <div class="container col-12 col-md-8 col-lg-4 ">
+        <div id="liveAlertPlaceholder"></div>
+        <h4 class="mb-3">To Reset Password</h4>
+         
+    <div class="forgotpwd--form   ">
+      <div class="form-floating mb-3">
+        <input
+          type="email"
+          class="form-control"
+          id="floatingInput"
+          placeholder="name@example.com"
+          value="karthicknammakkal@gmail.com"
+        />
+        <p id="emailerr"></p>
+        <label for="floatingInput">Email address</label>
+      </div>
+  
+      <button type="button" class="btn btn-primary col-12 mb-3" id="fpwd">
+       Submit
+      </button>
+      <a href="./sign_in.html" style="text-decoration: none; color: #ffffff;">
+      <button type="button" class="btn btn-secondary col-12 mb-3" >
+       Sign In
+      
+      </button></a>
+      
+      
+    </div>
+  </div>
+  </div>
+      <div id="freaze">
+        <div class="spinner"></div>
+        <p>
+          The server is taking longer than expected to respond. Please
+          wait a moment or try again later.
+        </p>
+      </div>
+    </section>
+
+</main>
+<footer class="d-flex justify-content-center align-items-center bg-dark">
+    <div class="attribution text-light">
+      ©Coded by
+      <a href="https://www.linkedin.com/in/karthick-kaliannan-68b763191/"
+        >Karthick</a
+      >.
+    </div>
+  </footer>
+ <script type="module">
+  import API_URI from "./config/global.js";
+import forgot from "./controllers/forgot.js";
+  function validatesigninForm() {
+  let flag;
+  const email = document.getElementById("floatingInput");
+  const emailerr = document.getElementById("emailerr");
+  var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/;
+  if (email.value === "") {
+    flag = true;
+    emailerr.innerText = "Email should not be empty!";
+  } else if (emailPattern.test(email.value) === false) {
+    emailerr.innerText = "Please enter a valid email address";
+  } else {
+    emailerr.innerText = "";
+  }
+  return true;
+}
+document.getElementById("fpwd").addEventListener("click", async () => {
+  const freaze = document.getElementById("freaze");
+  const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
+  if (alertPlaceholder.innerHTML == "") {
+    let form = await validatesigninForm();
+    if (form) {
+      freaze.style.display = "flex";
+
+      const email = document.getElementById("floatingInput");
+
+      let response = await forgot(email.value);
+      console.log(response);
+      const appendAlert = (message, type) => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = [
+          `<div class="alert alert-${type} alert-dismissible" role="alert">
+            <div>${message}</div>
+            </div>`,
+        ];
+        const alertPlaceholderCheck = document.getElementById(
+          "liveAlertPlaceholder"
+        );
+        if (alertPlaceholderCheck.innerHTML == "") {
+          alertPlaceholder.append(wrapper);
+        }
+        freaze.style.display = "none";
+      };
+
+      if (response.code == 401) {
+        appendAlert(response.message, "danger");
+      } else {
+        if(response.message=="Invalid Email"){
+        appendAlert(response.message, "danger");
+        }
+        else if(response.message=="Password reset email was sent successfully."){
+        appendAlert(response.message, "success");
+        }
+
+        freaze.style.display = "none";
+      
+      }
+    }
+  }
+});
+
+ </script>
+
+  </body>
+</html>

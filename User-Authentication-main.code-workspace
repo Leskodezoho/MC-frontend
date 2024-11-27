@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../User-Authentication-main"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "MC Log In"
+	}
+}
