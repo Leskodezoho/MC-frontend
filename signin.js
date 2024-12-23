@@ -38,6 +38,12 @@ document.getElementById("signin").addEventListener("click", async () => {
 
   const email = document.getElementById("floatingInput").value;
   const password = document.getElementById("floatingPassword").value;
+  const loader = document.getElementById("loader");
+  const signinForm = document.getElementById("signin-form");
+
+  // Hide the form and show the spinner
+  signinForm.style.display = "none";
+  loader.style.display = "flex";
 
   try {
     const response = await signin(email, password);
@@ -45,7 +51,7 @@ document.getElementById("signin").addEventListener("click", async () => {
     if (response.status === 200) {
       const data = await response.json();
       console.log(data);
-      
+
       localStorage.setItem("token", data.token);
       window.location.href = "./index.html";
     } else {
@@ -57,5 +63,9 @@ document.getElementById("signin").addEventListener("click", async () => {
     }
   } catch (error) {
     console.error("Error during login:", error);
+  } finally {
+    // Hide the spinner and show the form
+    loader.style.display = "none";
+    signinForm.style.display = "block";
   }
 });
