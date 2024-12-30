@@ -35,6 +35,9 @@ document.getElementById("logout").addEventListener("click", () => {
 
 /////////////////////------------tab
 document.getElementById('radio-1').addEventListener('change', function() {
+  document.getElementById("Dashboard").src ="";
+    document.getElementById("Dashboard").src = "https://creatorapp.zohopublic.in/handworkstech/medical-certificate-issuance-system/page-embed/Dasboardv2/OUKFjGUVmYVQUgANxj88OCf4RJQvrqZs5NY5Nm9Xu72zZBEC6UxyBtyD67JXKBJHOukWmV8p7sq4MR74WHVHk0HOU4SMaKmSQjJE?key=" + UniqueID;
+
   showContent('content-1');
 });
 document.getElementById('radio-2').addEventListener('change', function() {
