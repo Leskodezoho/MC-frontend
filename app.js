@@ -9,7 +9,7 @@ async function homefun(params) {
 if(resp.UniqueID){
    UniqueID+=resp.UniqueID;
     document.getElementById("Dashboard").src = "https://creatorapp.zohopublic.in/handworkstech/medical-certificate-issuance-system/page-embed/Dasboardv2/OUKFjGUVmYVQUgANxj88OCf4RJQvrqZs5NY5Nm9Xu72zZBEC6UxyBtyD67JXKBJHOukWmV8p7sq4MR74WHVHk0HOU4SMaKmSQjJE?key=" + UniqueID;
-    
+    document.getElementById('radio-1').checked=true;
     showContent('content-1');
   }
 else{
