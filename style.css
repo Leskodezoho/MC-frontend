@@ -227,4 +227,7 @@ input[type="radio"]:checked  + .tab {
   .hamburger-icon {
     display: initial;
   }
+  .zsFormClass{
+    width: fit-content !important;
+  }
 }
